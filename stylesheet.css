@@ -1,0 +1,77 @@
+* {
+    font-family: "Varela";
+}
+
+html {
+    min-height: 100%;
+
+}
+
+body {
+    background-image: linear-gradient(#A8DADC, #F1FAEE);
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100%;
+}
+
+h1 {
+    color: #457B9D;
+    text-shadow: 1px 1px 3px #1D3557;
+}
+
+button {
+    display: block;
+    margin: auto;
+    margin-top: 2em;
+    width: 180px;
+    height: 40px;
+    border-radius: 18px;
+    background-color: #457B9D;
+    border: solid 1px transparent;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0px 5px 13px rgba(0, 0, 0, 0.507);
+    transition: all .1s ease-in-out;
+}
+
+button:hover {
+    background-color: #1D3557;
+    border-color: #fff;
+    transition: all .1s ease-in-out;
+}
+
+button:active {
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.507);
+    transition: all .05s ease-in-out;
+}
+
+button:focus {
+    outline-width: 0;
+}
+
+.center {
+    margin: auto;
+    text-align: center;
+
+}
+
+.inputField {
+    width: 25%;
+    height: 2em;
+    border-radius: 5px;
+    border: none;
+}
+
+.inputField:focus {
+    outline-width: 0;
+}
+
+/* class to prevent issue where transitions were playing on page refresh */
+.preload * {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -ms-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+  }
