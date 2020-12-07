@@ -3,6 +3,7 @@ const path = require("path");
 const { Client } = require("pg");
 const urlModule = require("url");
 const crypto = require("crypto");
+
 const app = express();
 
 //Setup variables for both heroku and local
@@ -37,17 +38,11 @@ app.get("/*", (req, res) => {
 
     client.connect();
 
-    var queryString = "SELECT original_url FROM urls WHERE short_url = 'http://smllurl.herokuapp.com" + req.originalUrl + "';";
+    var values = ["http://smllurl.herokuapp.com" + req.originalUrl]
+    var queryString = "SELECT original_url FROM urls WHERE short_url = $1;";
     console.log("query: " + queryString);
-    client.query(queryString, (err, databaseRes) => {
-        if(err){
-            if(err.code == "23505"){
-                console.log("duplicate key");
-            }
-            else{
-                throw err;
-            }
-        }
+    client.query(queryString, values, (err, databaseRes) => {
+        if(err) throw err;
         
         console.log(databaseRes.rows[0]);
         if(databaseRes.rows[0] != null){
@@ -105,11 +100,11 @@ app.post("/", (req, res) => {
         }
       })
     
-
-    client.query("INSERT INTO urls (short_url, original_url) VALUES ('" + finalUrl + "', '" + req.body.url + "')", (err, databaseRes) => {
+    values = [finalUrl, req.body.url];
+    client.query("INSERT INTO urls (short_url, original_url) VALUES ($1, $2)", values, (err, databaseRes) => {
         if(err){
             if(err.code == "23505"){
-                console.log("duplicate key, not adding key " + finalUrl + " or " + req.body.url);
+                console.log("duplicate key, not adding short_url " + finalUrl + " or original_url " + req.body.url);
             }
             else{
                 throw err;
