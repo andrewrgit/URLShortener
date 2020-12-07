@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="stylesheet.css">
+        <title>URL Shortener</title>
+
+
+    </head>
+    <body class="preload">
+        <div class="center">
+            <h1>URL Shortener</h1>
+            <p>Enter a URL into the text box below, click shorten, and you will be given a shortened version of your URL!</p>
+            <form method="post" action="/" id="urlForm">
+                <input id = "urlField" name="url" class="inputField" type="text"></input>
+                <button type="button" onClick="generateUrl();">Shorten</button>
+            </form>
+            <p id="urlLoc"></p>
+            <button id="copyBtn" onClick="copyToClipboard();" style="visibility: hidden;">Copy Link</button>
+        </div>
+        
+
+        <script src="index.js"></script> 
+    </body>
+</html>
