@@ -27,7 +27,7 @@ app.listen(port, () => {
 })
 
 app.get("/*", (req, res) => {
-    console.log(req.originalUrl);
+    console.log("req.originalUrl: " + req.originalUrl);
 
     //Databse retrieval code
     var client = new Client({
@@ -38,7 +38,7 @@ app.get("/*", (req, res) => {
     client.connect();
 
     var queryString = "SELECT original_url FROM urls WHERE short_url = 'http://smllurl.herokuapp.com" + req.originalUrl + "';";
-    console.log(queryString);
+    console.log("query: " + queryString);
     client.query(queryString, (err, databaseRes) => {
         if(err){
             if(err.code == "23505"){
@@ -48,8 +48,15 @@ app.get("/*", (req, res) => {
                 throw err;
             }
         }
+        
         console.log(databaseRes.rows[0]);
-        res.redirect((databaseRes.rows[0])["original_url"]);
+        if(databaseRes.rows[0] != null){
+            res.redirect((databaseRes.rows[0])["original_url"]);
+        }
+        else{
+            res.sendStatus(400);
+        }
+        
 
         client.end();
     })
@@ -102,7 +109,7 @@ app.post("/", (req, res) => {
     client.query("INSERT INTO urls (short_url, original_url) VALUES ('" + finalUrl + "', '" + req.body.url + "')", (err, databaseRes) => {
         if(err){
             if(err.code == "23505"){
-                console.log("duplicate key");
+                console.log("duplicate key, not adding key " + finalUrl " or " + req.body.url);
             }
             else{
                 throw err;
