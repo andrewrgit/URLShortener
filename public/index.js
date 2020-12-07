@@ -17,6 +17,7 @@ function generateUrl(){
     copyBtn.style.removeProperty("visibility");
 }
 
+//Button that copies generated url to clipboard
 function copyToClipboard(){
     var urlText = document.getElementById("urlLoc");
     var copyBtn = document.getElementById("copyBtn");
