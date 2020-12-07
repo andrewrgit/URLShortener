@@ -2,7 +2,12 @@ const express = require("express");
 const path = require("path");
 const crypto = require("crypto");
 const app = express();
-const port = 3000;
+
+//Setup port for both heroku and local
+let port = process.env.PORT;
+if(!port || port == ""){
+    port = 3000;
+}
 
 app.use(express.static(path.resolve(__dirname + "\\..\\public")));
 app.use(express.urlencoded());

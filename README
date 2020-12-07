@@ -1,0 +1,8 @@
+URL shortener app using Node.js
+
+To run project:
+
+1) Have Node.js and npm installed
+2) 'npm install' in server directory
+3) 'npm app.js' in server directory
+4) App is hosted on port 3000
