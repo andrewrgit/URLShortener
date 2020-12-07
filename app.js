@@ -12,6 +12,10 @@ if(!port || port == ""){
 }
 
 let connString = process.env.DATABASE_URL;
+if(!connString || connString == ""){
+    connString = "postgres://postgres:password@localhost:5432/Andrew";
+}
+
 
 
 app.use(express.static(path.resolve(__dirname, "public")));
@@ -23,25 +27,24 @@ app.listen(port, () => {
 })
 
 app.get("/*", (req, res) => {
-
-    res.send("ope");
     console.log(req.originalUrl);
 
     //Databse retrieval code
     var client = new Client({
         connectionString: connString,
-        ssl: {
-            rejectUnauthorized: false
-        }
+        ssl: false
     });
 
     client.connect();
 
     client.query("SELECT original_url FROM urls WHERE short_url = 'http://smllurl.herokuapps.com" + req.originalUrl + "';", (err, databaseRes) => {
+        if(err) throw err;
         res.redirect((databaseRes.rows[0])["original_url"]);
+
+        client.end();
     })
 
-    client.end();
+    
 })
 
 app.post("/", (req, res) => {
@@ -55,7 +58,7 @@ app.post("/", (req, res) => {
             }
         }
     }
-
+    console.log(connString);
     //Hash the url then base64 encode
     var url = crypto.createHash("sha1").update(req.body.url).digest("base64");
     //base64 includes the / character so we replace it with a -
@@ -74,17 +77,25 @@ app.post("/", (req, res) => {
 
     var client = new Client({
         connectionString: connString,
-        ssl: {
-            rejectUnauthorized: false
-        }
+        ssl: false
     });
 
-    client.connect();
+    client.connect(err => {
+        if (err) {
+          console.error('connection error', err.stack)
+        } else {
+          console.log('connected')
+        }
+      })
+    
 
     client.query("INSERT INTO urls (short_url, original_url) VALUES ('" + finalUrl + "', '" + req.body.url + "')", (err, databaseRes) => {
+        if(err) throw err;
+
+        client.end();
     })
 
-    client.end();
+    
 
     res.status(200).send(JSON.stringify(body));
 })
