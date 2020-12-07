@@ -109,7 +109,7 @@ app.post("/", (req, res) => {
     client.query("INSERT INTO urls (short_url, original_url) VALUES ('" + finalUrl + "', '" + req.body.url + "')", (err, databaseRes) => {
         if(err){
             if(err.code == "23505"){
-                console.log("duplicate key, not adding key " + finalUrl " or " + req.body.url);
+                console.log("duplicate key, not adding key " + finalUrl + " or " + req.body.url);
             }
             else{
                 throw err;
