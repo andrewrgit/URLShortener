@@ -5,7 +5,7 @@ const urlModule = require("url");
 const crypto = require("crypto");
 const app = express();
 
-//Setup port for both heroku and local
+//Setup variables for both heroku and local
 let port = process.env.PORT;
 if(!port || port == ""){
     port = 3000;
@@ -37,8 +37,11 @@ app.get("/*", (req, res) => {
 
     client.connect();
 
-    client.query("SELECT original_url FROM urls WHERE short_url = 'http://smllurl.herokuapps.com" + req.originalUrl + "';", (err, databaseRes) => {
+    var queryString = "SELECT original_url FROM urls WHERE short_url = 'http://smllurl.herokuapp.com" + req.originalUrl + "';";
+    console.log(queryString);
+    client.query(queryString, (err, databaseRes) => {
         if(err) throw err;
+        console.log(databaseRes.rows[0]);
         res.redirect((databaseRes.rows[0])["original_url"]);
 
         client.end();
