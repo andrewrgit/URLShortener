@@ -9,7 +9,7 @@ if(!port || port == ""){
     port = 3000;
 }
 
-app.use(express.static(path.resolve(__dirname + "\\..\\public")));
+app.use(express.static(path.resolve(__dirname + "\\public")));
 app.use(express.urlencoded());
 app.use(express.json());
 
