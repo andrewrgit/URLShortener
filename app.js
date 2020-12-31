@@ -20,7 +20,7 @@ if(!connString || connString == ""){
 
 
 app.use(express.static(path.resolve(__dirname, "public")));
-app.use(express.urlencoded());
+app.use(express.urlencoded( { extended: true }));
 app.use(express.json());
 
 app.listen(port, () => {

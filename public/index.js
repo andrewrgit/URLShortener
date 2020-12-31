@@ -8,13 +8,22 @@ function generateUrl(){
     xhr.open("POST", "/", false);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     var params = {
-        "url": urlField.value
+        url: urlField.value
     }
-    console.log(JSON.stringify(params));
+
     xhr.send(JSON.stringify(params));
-    console.log(JSON.parse(xhr.response));
-    urlText.innerHTML = JSON.parse(xhr.response).url;
-    copyBtn.style.removeProperty("visibility");
+    if(xhr.status == 400){
+        urlText.innerHTML = "ERROR: Unable to parse URL. Ensure it is in the correct format (http://websitename.com)"
+        urlText.style.color = "red";
+        copyBtn.style.visibility = "hidden";
+    }
+    else{
+        urlText.innerHTML = JSON.parse(xhr.response).url;
+        urlText.style.color = "black";
+        copyBtn.style.visibility = "";
+    }
+    
+    
 }
 
 //Button that copies generated url to clipboard
