@@ -1,37 +1,45 @@
 //Function called by the shorten button to request url from server
 function generateUrl(){
-    var urlField = document.getElementById("urlField");
-    var urlText = document.getElementById("urlLoc");
-    var copyBtn = document.getElementById("copyBtn");
+    let urlField = document.getElementById("urlField");
+    let urlText = document.getElementById("urlLoc");
+    let copyBtn = document.getElementById("copyBtn");
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/", false);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    var params = {
+
+    let params = {
         url: urlField.value
     }
 
-    xhr.send(JSON.stringify(params));
-    if(xhr.status == 400){
-        urlText.innerHTML = "ERROR: Unable to parse URL. Ensure it is in the correct format (http://websitename.com)"
-        urlText.style.color = "red";
-        copyBtn.style.visibility = "hidden";
-    }
-    else{
-        urlText.innerHTML = JSON.parse(xhr.response).url;
+    console.log("1");
+    fetch("/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(params)
+    }).then(response => {
+        if(!response.ok){
+            throw new Error("Unable to parse URL. Ensure it is in the correct format (http://websitename.com)");
+        }
+        return response.json();
+    }).then( data => {
+        urlText.innerHTML = data.url;
         urlText.style.color = "black";
-        copyBtn.style.visibility = "";
-    }
-    
-    
+        copyBtn.style.display = "block";
+        console.log("displaying short url");
+    }).catch(err => {
+        urlText.innerHTML = err;
+        urlText.style.color = "red";
+        copyBtn.style.display = "none";
+    })
+    console.log("2");
 }
 
 //Button that copies generated url to clipboard
 function copyToClipboard(){
-    var urlText = document.getElementById("urlLoc");
-    var copyBtn = document.getElementById("copyBtn");
+    let urlText = document.getElementById("urlLoc");
+    let copyBtn = document.getElementById("copyBtn");
 
-    var textAreaElement = document.createElement("textarea");
+    let textAreaElement = document.createElement("textarea");
     document.body.append(textAreaElement);
     textAreaElement.value = urlText.innerHTML;
     textAreaElement.select();
@@ -41,15 +49,15 @@ function copyToClipboard(){
 
 //Prevents issue that caused transitions to fire on page refresh
 window.addEventListener("load", (event) => {
-    var elements = document.getElementsByClassName("preload");
-    for(var i =0; i < elements.length; i++){
+    let elements = document.getElementsByClassName("preload");
+    for(let i = 0; i < elements.length; i++){
         elements[i].classList.remove("preload");
     }
 })
 
 //Prevents user from pressing enter to submit form, which caused unwanted page refresh
 document.getElementById("urlForm").onkeypress = function(e) {
-    var key = e.key; 
+    let key = e.key; 
     if (key == "Enter") {
       e.preventDefault();
     }
