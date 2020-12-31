@@ -40,7 +40,7 @@ app.get("/*", (req, res) => {
 
     var values = ["http://smllurl.herokuapp.com" + req.originalUrl]
     var queryString = "SELECT original_url FROM urls WHERE short_url = $1;";
-    console.log("query: " + queryString);
+
     client.query(queryString, values, (err, databaseRes) => {
         if(err) throw err;
         
